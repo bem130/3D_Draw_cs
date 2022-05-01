@@ -12,15 +12,25 @@ namespace _3D_Draw_cs
     internal class Rendering
     {
         DImage dImage;
+        Vector2D vector2d;
+        Vector3D vector3d;
+        int frame_x;
+        int frame_y;
+        double cam_lx;
+        double cam_ly;
+        double cam_lz;
+        double cam_ah;
+        double cam_av;
         public Rendering()
         {
             dImage = new DImage();
             dImage.makenew("VGA");
+            frame_x = dImage.frame_x;
+            frame_y = dImage.frame_y;
 
-
-            for (int i=0; i < dImage.frame_y;i++)
+            for (int i=0;i<frame_y;i++)
             {
-                for (int j=0;j<dImage.frame_x;j++)
+                for (int j=0;j<frame_x;j++)
                 {
                     dImage.setpixcel(j, i, 255, 255, 0, 0);
                 }
@@ -31,10 +41,37 @@ namespace _3D_Draw_cs
         {
             return dImage.frame;
         }
+        public int[] pos3t2d(double[] v)
+        {
+            v = vector3d.sub(v, new double[3] { cam_lx, cam_ly, cam_lz });
+            v = vector3d.rotate_z(v, cam_ah);
+            v = vector3d.rotate_x(v, -cam_av);
+            double leng = Math.Abs(14/v[1]);
+            double scale = frame_x/10;
+            return vector2d.toInt(vector2d.add(vector2d.scale(new double[2] {v[0],-v[2]},leng*scale),new double[2] {frame_x/2,frame_y/2}));
+        }
+        public bool inclusion(double[][] v1,double[][] v2)
+        {
+            double[] a = vector2d.sub(v2[0], v1[0]);
+            double[] b = vector2d.sub(v2[1], v1[1]);
+            double[] c = vector2d.sub(v2[2], v1[2]);
+            double ab = a[0]*b[1]-a[1]*b[0];
+            double bc = b[0]*c[1]-b[1]*c[0];
+            double ca = c[0]*a[1]-c[1]*a[0];
+            return ab<=0&&bc<=0&&ca<=0;
+        }
+        public double[] gcot(double[][] t) // 三角形の代表座標(3点の平均)
+        {
+            return new double[3] { (t[0][0]+t[1][0]+t[2][0])/3, (t[0][1]+t[1][1]+t[2][1])/3, (t[0][2]+t[1][2]+t[2][2])/3 };
+        }
     }
 
     class Vector3D
     {
+        public int[] toInt(double[] v)
+        {
+            return new int[3] { (int)v[0], (int)v[1], (int)v[2] };
+        }
         public double[] make(double x, double y, double z)
         {
             return new double[3] { x, y, z };
@@ -43,13 +80,13 @@ namespace _3D_Draw_cs
         {
             return new double[3] { v1[0]+v2[0], v1[1]+v2[1], v1[2]+v2[2] };
         }
-        public double[] scale(double[] v1, double s)
-        {
-            return new double[3] { v1[0]*s, v1[1]*s, v1[2]*s };
-        }
         public double[] sub(double[] v1, double[] v2)
         {
             return new double[3] { v1[0]-v2[0], v1[1]-v2[1], v1[2]-v2[2] };
+        }
+        public double[] scale(double[] v1, double s)
+        {
+            return new double[3] { v1[0]*s, v1[1]*s, v1[2]*s };
         }
         public double[] rotate(double[] v1,double rx,double ry,double rz)
         {
@@ -108,6 +145,10 @@ namespace _3D_Draw_cs
 
     class Vector2D
     {
+        public int[] toInt(double[] v)
+        {
+            return new int[2] { (int)v[0], (int)v[1] };
+        }
         public double[] make(double x, double y)
         {
             return new double[2] { x, y };
@@ -119,6 +160,10 @@ namespace _3D_Draw_cs
         public double[] sub(double[] v1, double[] v2)
         {
             return new double[2] { v1[0]-v2[0], v1[1]-v2[1] };
+        }
+        public double[] scale(double[] v1, double s)
+        {
+            return new double[2] { v1[0]*s, v1[1]*s };
         }
         public double[] rotate(double[] v1, double r)
         {
