@@ -14,23 +14,24 @@ namespace _3D_Draw_cs
         DImage dImage;
         Vector2D vector2d;
         Vector3D vector3d;
-        int frame_x;
-        int frame_y;
-        double cam_lx;
-        double cam_ly;
-        double cam_lz;
-        double cam_ah;
-        double cam_av;
+        Camera cam;
         public Rendering()
         {
-            dImage = new DImage();
-            dImage.makenew("VGA");
-            frame_x = dImage.frame_x;
-            frame_y = dImage.frame_y;
+            cam = new Camera() {};
+            cam.setDisplay("VGA");
+            Debug.Print(cam.framex.ToString()+" "+cam.framey.ToString());
 
-            for (int i=0;i<frame_y;i++)
+            List<Polygon> obj = new List<Polygon>() // [-1.111458,-6.702212,1.106566],[-1.065905,-6.484399,0.54051],[-1.072946,-6.5781019999999994,0.589985]
             {
-                for (int j=0;j<frame_x;j++)
+                new Polygon() { pos = new double[][] { new double[] {-1,-6.7,1.1 }, new double[] {-1,-6.5,0.5 }, new double[] {-1.0,-6.5,0.58 }, } },
+            };
+
+            dImage = new DImage();
+            dImage.makenew(cam.framex,cam.framey);
+
+            for (int i=0;i<cam.framey;i++)
+            {
+                for (int j=0;j<cam.framex; j++)
                 {
                     dImage.setpixcel(j, i, 255, 255, 0, 0);
                 }
@@ -43,12 +44,12 @@ namespace _3D_Draw_cs
         }
         public int[] pos3t2d(double[] v)
         {
-            v = vector3d.sub(v, new double[3] { cam_lx, cam_ly, cam_lz });
-            v = vector3d.rotate_z(v, cam_ah);
-            v = vector3d.rotate_x(v, -cam_av);
+            v = vector3d.sub(v, new double[3] { cam.posx, cam.posy, cam.posz });
+            v = vector3d.rotate_z(v, cam.angh);
+            v = vector3d.rotate_x(v, -cam.angv);
             double leng = Math.Abs(14/v[1]);
-            double scale = frame_x/10;
-            return vector2d.toInt(vector2d.add(vector2d.scale(new double[2] {v[0],-v[2]},leng*scale),new double[2] {frame_x/2,frame_y/2}));
+            double scale = cam.framex/10;
+            return vector2d.toInt(vector2d.add(vector2d.scale(new double[2] {v[0],-v[2]},leng*scale),new double[2] {cam.framex/2,cam.framey/2}));
         }
         public bool inclusion(double[][] v1,double[][] v2)
         {
@@ -186,13 +187,10 @@ namespace _3D_Draw_cs
         public int frame_y;
         public DImage()
         {
-            display = new Dictionary<string, int[]>()
-            {
-                {"VGA", new int[] { 640,480,4,3 }},
-            };
             frame_x = 100;
             frame_y = 100;
             makenew(100,100);
+            return;
         }
         public Bitmap makenew(int x, int y)
         {
@@ -200,15 +198,6 @@ namespace _3D_Draw_cs
             frame_y = y+1;
             frame = new Bitmap(x+1, y+1);
             frame = fillRectangle(0, 0, x+1, y+1, 255, 255, 255, 255);
-            return frame;
-        }
-        public Bitmap makenew(string name)
-        {
-            int[] res = display[name];
-            frame_x = res[0]+1;
-            frame_y = res[1]+1;
-            frame = new Bitmap(res[0]+1, res[1]+1);
-            frame = fillRectangle(0, 0, res[0]+1, res[1]+1, 255, 25, 255, 255);
             return frame;
         }
         public void saveimage(string path)
@@ -232,5 +221,49 @@ namespace _3D_Draw_cs
             tmpedit.Dispose();
             return frame;
         }
+    }
+    public class Camera
+    {
+        Dictionary<string, int[]> display;
+        public double posx { get; set; } // position x
+        public double posy { get; set; } // position y
+        public double posz { get; set; } // position z
+        public double angh { get; set; } // angle h
+        public double angv { get; set; } // angle v
+        public int framex { get; set; } // frame x
+        public int framey { get; set; } // frame y
+        public Camera()
+        {
+            display = new Dictionary<string, int[]>()
+            {
+                {"VGA", new int[] { 640,480,4,3 }},
+            };
+            return;
+        }
+        public void setDisplay(string name)
+        {
+            int[] res = display[name];
+
+            setResolution(res[0], res[1]);
+            return;
+
+        }
+        public void setResolution(int x,int y)
+        {
+            Debug.Print(x.ToString()+" "+y.ToString()+" a");
+            if (x>0)
+            {
+                framex = x;
+            }
+            if (y>0)
+            {
+                framey = y;
+            }
+            return;
+        }
+    }
+    public class Polygon
+    {
+        public double[][] pos { get; set; } // position
     }
 }
