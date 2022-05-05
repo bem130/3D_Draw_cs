@@ -20,7 +20,7 @@ namespace _3D_Draw_cs
             cam = new Camera() {};
             vector2d = new Vector2D();
             vector3d = new Vector3D();
-            cam.setDisplay("VGA");
+            cam.setDisplay("4K");
             Debug.Print(cam.framex.ToString()+" "+cam.framey.ToString());
 
             List<Polygon> obj = new List<Polygon>()
@@ -31,13 +31,6 @@ namespace _3D_Draw_cs
             dImage = new DImage();
             dImage.makenew(cam.framex,cam.framey);
 
-            //for (int i = 0; i<cam.framey; i++)
-            //{
-            //    for (int j = 0; j<cam.framex; j+=2)
-            //    {
-            //        dImage.setpixcel(j, i, 255, 255, 0, 0);
-            //    }
-            //}
 
             List<Polygon> polygons = obj;
             double[] vl = vector3d.normalize(vector3d.make(1,15,50));
@@ -314,6 +307,7 @@ namespace _3D_Draw_cs
                 {"UXGA", new int[] { 1600,1200,4,3 }},
                 {"FHD", new int[] { 1920,1080,16,9 }},
                 {"4K", new int[] { 3840,2160,16,9 }},
+                {"8K", new int[] { 7680,4320,16,9 }},
             };
             posx = 10;
             posy = 10;
