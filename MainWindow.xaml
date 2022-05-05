@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_3D_Draw_cs"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="3D Draw" Height="450" Width="800">
     <Grid>
         <Image x:Name="ImageView" Margin="10,10,10,10"/>
     </Grid>
