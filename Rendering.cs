@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
-using System.Windows.Media.Imaging;
 using System.Diagnostics;
 
 namespace _3D_Draw_cs
@@ -22,7 +18,7 @@ namespace _3D_Draw_cs
             cam = new Camera();
             vector2d = new Vector2D();
             vector3d = new Vector3D();
-            cam.setDisplay("FHD");
+            cam.setDisplay("VGA");
             Debug.Print(cam.framex.ToString()+" "+cam.framey.ToString());
 
             obj = new List<Polygon>()

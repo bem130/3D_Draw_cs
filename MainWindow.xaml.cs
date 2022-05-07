@@ -53,7 +53,7 @@ namespace _3D_Draw_cs
                 render.render();
                 show();
                 sw.Stop();
-                Time.Text = (((double)sw.ElapsedMilliseconds)/1000).ToString();
+                Time.Text = (((double)sw.ElapsedMilliseconds)/1000).ToString()+" "+(1/(((double)sw.ElapsedMilliseconds)/1000)).ToString();
                 sw.Reset();
                 sw.Start();
                 await Task.Delay(10);
