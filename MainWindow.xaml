@@ -7,7 +7,17 @@
         mc:Ignorable="d"
         Title="3D Draw" Height="450" Width="800">
     <Grid>
-        <Image x:Name="ImageView" Margin="10,10,10,10"/>
-        <TextBlock x:Name="Time"></TextBlock>
+        <Image x:Name="ImageView"/>
+        <Grid Height="47" Width="220" HorizontalAlignment="Center" VerticalAlignment="Top" Background="#99FFFFFF">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="22"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="1" Grid.Column="0" x:Name="Time" FontSize="15" TextAlignment="Center">abc</TextBlock>
+            <ComboBox Grid.Row="0" Grid.Column="0" x:Name="DisplayResolution" SelectionChanged="changeDisplayRes" FontSize="10"/>
+        </Grid>
     </Grid>
 </Window>

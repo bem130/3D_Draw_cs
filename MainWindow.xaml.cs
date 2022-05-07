@@ -35,6 +35,8 @@ namespace _3D_Draw_cs
             InitializeComponent();
             render = new Rendering();
             renderloop();
+            DisplayResolution.ItemsSource = render.getDisplayRes();
+            DisplayResolution.SelectedValue = "VGA";
         }
         public void show()
         {
@@ -59,6 +61,13 @@ namespace _3D_Draw_cs
                 await Task.Delay(10);
             }
         }
+        public void changeDisplayRes()
+        {
+            Debug.Print("display setting changed");
+            Debug.Print(DisplayResolution.SelectedValue.ToString());
+            render.setDisplay(DisplayResolution.SelectedValue.ToString());
+        }
+        public void changeDisplayRes(object sender, SelectionChangedEventArgs e){ changeDisplayRes();}
     }
 
 }
