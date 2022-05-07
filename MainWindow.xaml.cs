@@ -26,9 +26,16 @@ namespace _3D_Draw_cs
     public partial class MainWindow : Window
     {
         Rendering render;
-
+        Stopwatch sw;
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr hObject);
+        public MainWindow()
+        {
+            sw = new Stopwatch();
+            InitializeComponent();
+            render = new Rendering();
+            renderloop();
+        }
         public void show()
         {
             Bitmap showimage = render.GetImage();
@@ -37,12 +44,20 @@ namespace _3D_Draw_cs
             DeleteObject(hbitmap);
             showimage.Dispose();
         }
-        public MainWindow()
+        async public void renderloop()
         {
-            render = new Rendering();
-            InitializeComponent();
-            show();
-
+            await Task.Delay(100);
+            sw.Start();
+            while (true)
+            {
+                render.render();
+                show();
+                sw.Stop();
+                Time.Text = (((double)sw.ElapsedMilliseconds)/1000).ToString();
+                sw.Reset();
+                sw.Start();
+                await Task.Delay(10);
+            }
         }
     }
 
